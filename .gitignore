@@ -1,0 +1,38 @@
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Xcode / macOS
+DerivedData/
+.DS_Store
+*.xcuserdata
+*.xcuserstate
+*.xcarchive
+
+# Editor / temporary files
+*.swp
+*.tmp
+
+# Logs
+*.log
+
+# Packaged artifacts
+dist/
+*.dmg
+FocusKeeper-*.dmg
+*.zip
+*.pkg
+*.ipa
+*.app
+
+# Runtime backups and private local data
+Backups/
+*.backup
+
+# Secrets, signing, provisioning
+.env
+.env.*
+*.p12
+*.cer
+*.mobileprovision
+*.provisionprofile
