@@ -79,37 +79,43 @@ struct SettingsView: View {
     }
 
     private var profileSidebar: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(strings.profilesTitle)
-                    .font(.title3.weight(.semibold))
+                    .font(.headline)
                 Text(strings.profilePriorityHelp)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(.horizontal, 14)
+            .padding(.horizontal, 18)
             .padding(.top, 18)
+            .padding(.bottom, 12)
 
-            List(selection: Binding(
-                get: { settingsStore.selectedProfileID },
-                set: { id in
-                    if let id {
-                        settingsStore.selectProfile(id: id)
+            ScrollView {
+                LazyVStack(spacing: 6) {
+                    ForEach(settingsStore.profiles) { profile in
+                        ProfileListRow(
+                            profile: profile,
+                            isSelected: settingsStore.selectedProfileID == profile.id,
+                            strings: strings,
+                            onSelect: {
+                                settingsStore.selectProfile(id: profile.id)
+                            },
+                            onActivate: {
+                                if settingsStore.selectedProfileID != profile.id {
+                                    settingsStore.selectProfile(id: profile.id)
+                                }
+                                settingsStore.activateProfile(id: profile.id)
+                            }
+                        )
                     }
                 }
-            )) {
-                ForEach(settingsStore.profiles) { profile in
-                    ProfileListRow(profile: profile, strings: strings) {
-                        if settingsStore.selectedProfileID != profile.id {
-                            settingsStore.selectProfile(id: profile.id)
-                        }
-                        settingsStore.activateProfile(id: profile.id)
-                    }
-                    .tag(Optional(profile.id))
-                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
             }
-            .listStyle(.sidebar)
+
+            Divider()
 
             VStack(spacing: 8) {
                 HStack(spacing: 8) {
@@ -146,10 +152,10 @@ struct SettingsView: View {
                 }
             }
             .controlSize(.regular)
-            .padding(14)
+            .padding(12)
         }
         .frame(width: 300)
-        .background(Color(nsColor: .underPageBackgroundColor))
+        .background(AppTheme.sidebarBackground)
     }
 
     private var header: some View {
@@ -590,6 +596,7 @@ private enum AppTheme {
     static let danger = Color(nsColor: .systemRed)
     static let border = Color(nsColor: .separatorColor).opacity(0.55)
     static let windowBackground = Color(nsColor: .windowBackgroundColor)
+    static let sidebarBackground = Color(nsColor: .windowBackgroundColor)
     static let panelBackground = Color(nsColor: .controlBackgroundColor)
     static let contentBackground = Color(nsColor: .textBackgroundColor)
 }
@@ -619,30 +626,57 @@ private enum StatusTone {
 
 private struct ProfileListRow: View {
     let profile: FocusProfile
+    let isSelected: Bool
     let strings: AppStrings
+    let onSelect: () -> Void
     let onActivate: () -> Void
 
     var body: some View {
         HStack(spacing: 10) {
             Button(action: onActivate) {
                 Image(systemName: profile.isEnabled ? "checkmark.circle.fill" : "circle")
+                    .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(profile.isEnabled ? AppTheme.success : .secondary)
-                    .frame(width: 22, height: 22)
+                    .frame(width: 24, height: 24)
             }
             .buttonStyle(.plain)
             .accessibilityLabel(strings.activateProfile)
 
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(profile.name.isEmpty ? strings.profilesTitle : profile.name)
                     .font(.body.weight(.medium))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
                 Text("\(profile.watchedBundleIdentifiers.count) \(strings.overviewApps.lowercased())")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
 
-            Spacer()
+            Spacer(minLength: 0)
         }
-        .frame(minHeight: 44)
+        .padding(.horizontal, 10)
+        .frame(minHeight: 52)
+        .contentShape(RoundedRectangle(cornerRadius: 8))
+        .background(rowBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(profile.isEnabled ? AppTheme.success.opacity(0.35) : Color.clear, lineWidth: 1)
+        )
+        .onTapGesture(perform: onSelect)
+    }
+
+    private var rowBackground: Color {
+        if isSelected {
+            return AppTheme.accent.opacity(0.14)
+        }
+
+        if profile.isEnabled {
+            return AppTheme.success.opacity(0.08)
+        }
+
+        return Color.clear
     }
 }
 
