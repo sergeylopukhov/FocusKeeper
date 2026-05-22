@@ -516,7 +516,6 @@ final class SettingsStore: ObservableObject {
                 configObject[key] = value
             }
 
-            // Keep legacy keys only as inert compatibility data; runtime reads profiles.
             let data = try JSONSerialization.data(withJSONObject: configObject, options: [.prettyPrinted, .sortedKeys])
             try data.write(to: configURL, options: [.atomic])
             preservedRootObject = configObject

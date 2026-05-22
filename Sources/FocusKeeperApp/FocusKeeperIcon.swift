@@ -19,7 +19,6 @@ enum FocusKeeperIcon {
         NSColor.black.setStroke()
         NSColor.black.setFill()
 
-        // A pinned crescent: close enough to Focus, but distinct from the system DND moon.
         let crescent = NSBezierPath()
         crescent.appendArc(
             withCenter: NSPoint(x: 8.0, y: 9.4),

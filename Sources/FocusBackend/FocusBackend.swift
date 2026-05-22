@@ -444,7 +444,6 @@ private extension FocusBackend {
             )
         }
 
-        // killall returns 1 when a process is not currently running. That is acceptable here.
         if process.terminationStatus != 0 && process.terminationStatus != 1 {
             let output = String(
                 data: outputPipe.fileHandleForReading.readDataToEndOfFile(),

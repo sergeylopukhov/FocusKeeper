@@ -96,7 +96,7 @@ Use:
 FocusKeeper menu -> Diagnostics -> Copy Diagnostics to Clipboard
 ```
 
-Paste that report into ChatGPT/Codex for debugging. It includes technical status, paths, active profile, watched bundle IDs, last backend action, and last error. It does not dump full JSON files.
+Paste that report when requesting support. It includes technical status, paths, active profile, watched bundle IDs, last backend action, and last error. It does not dump full JSON files.
 
 ## Open Logs And Backups
 

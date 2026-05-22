@@ -34,7 +34,7 @@ FocusKeeper does not use Apple Shortcuts, does not run `shortcuts run`, and does
 
 ## Screenshots
 
-Screenshots will be added after the public release assets are prepared.
+Screenshots are not included yet.
 
 ## Tested Setup
 
