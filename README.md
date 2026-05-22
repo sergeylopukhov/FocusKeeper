@@ -155,10 +155,6 @@ rm -f "$HOME/Library/LaunchAgents/com.focuskeeper.app.plist"
 launchctl unload "$HOME/Library/LaunchAgents/com.focuskeeper.app.plist" 2>/dev/null || true
 ```
 
-## Troubleshooting
-
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
-
 ## Backups And Logs
 
 Before the first write in each app process session, FocusKeeper creates a backup under:
